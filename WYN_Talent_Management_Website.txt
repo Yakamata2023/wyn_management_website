@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WYN Management - Elite Talent Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(45deg, transparent 48%, #ff0000 49%, #ff0000 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, #ff0000 49%, #ff0000 51%, transparent 52%);
+            background-size: 20px 20px, 20px 20px;
+            background-position: 0 0, 10px 10px;
+            animation: backgroundMove 20s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes backgroundMove {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(20px) translateY(20px); }
+        }
+
+        /* Side Menu */
+        .side-menu {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            z-index: 2000;
+            transition: left 0.3s ease;
+            border-right: 2px solid #ff0000;
+            box-shadow: 5px 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .side-menu.open {
+            left: 0;
+        }
+
+        .menu-header {
+            padding: 30px 20px;
+            border-bottom: 2px solid #ff0000;
+            text-align: center;
+        }
+
+        .menu-logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffffff, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .menu-items {
+            padding: 30px 0;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 15px 30px;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-size: 1.1em;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff0000;
+            color: #ff0000;
+            padding-left: 40px;
+        }
+
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2001;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: #ff0000;
+            color: #000;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #ff0000;
+            z-index: 1000;
+        }
+
+        .company-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            background: linear-gradient(45deg, #ffffff 0%, #000000 25%, #ffffff 50%, #000000 75%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: illuminateText 3s ease-in-out infinite, titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes illuminateText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 10px #ff0000); }
+            100% { filter: drop-shadow(0 0 20px #ff0000); }
+        }
+
+        .nav-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-option {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            border-radius: 20px;
+        }
+
+        .nav-option:hover, .nav-option.active {
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .red-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+            margin: 10px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 200px;
+            min-height: 100vh;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .hero-title {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2em;
+            color: #cccccc;
+            margin-bottom: 40px;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Football Icons */
+        .football-icons {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .football-silhouette {
+            width: 150px;
+            height: 200px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"><path d="M50 10 C30 10 15 25 15 45 L15 95 C15 115 30 130 50 130 C70 130 85 115 85 95 L85 45 C85 25 70 10 50 10 Z" fill="%23333"/><circle cx="50" cy="125" r="8" fill="%23ff0000"/><path d="M40 20 L45 30 L55 30 L60 20" stroke="%23ff0000" fill="none" stroke-width="2"/><path d="M30 50 L35 60 L65 60 L70 50" stroke="%23ff0000" fill="none" stroke-width="2"/></svg>') no-repeat center;
+            background-size: contain;
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        .football-ball {
+            width: 50px;
+            height: 50px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23ffffff" stroke="%23000" stroke-width="2"/><path d="M30 30 L70 70 M70 30 L30 70" stroke="%23000" stroke-width="2"/><circle cx="50" cy="50" r="15" fill="none" stroke="%23000" stroke-width="2"/></svg>') no-repeat center;
+            background-size: contain;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Talent Grid */
+        .talent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .talent-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: cardFadeIn 1s ease-out;
+            cursor: pointer;
+        }
+
+        .talent-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff0000;
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.3);
+        }
+
+        .talent-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: sweep 3s linear infinite;
+        }
+
+        @keyframes sweep {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .talent-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #333, #666);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            border: 3px solid #ff0000;
+            animation: pulse 2s infinite;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .talent-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffffff, #ff0000, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: illuminateText 2s ease-in-out infinite;
+        }
+
+        .talent-role {
+            color: #ff0000;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .talent-description {
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .talent-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            border-top: 1px solid #333;
+            padding-top: 0;
+        }
+
+        .talent-details.expanded {
+            max-height: 1000px;
+            padding-top: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .social-link {
+            padding: 10px 15px;
+            background: #ff0000;
+            color: #000;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .social-link:hover {
+            background: #fff;
+            transform: translateY(-3px);
+        }
+
+        .expand-btn {
+            background: linear-gradient(45deg, #ff0000, #ffffff);
+            border: none;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .expand-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Company Info */
+        .company-info {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 50px;
+            margin: 50px 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .info-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 4px solid #ff0000;
+        }
+
+        .info-title {
+            color: #ff0000;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            padding: 30px;
+            text-align: center;
+            border-top: 2px solid #ff0000;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            color: #cccccc;
+        }
+
+        .contact-label {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ff0000;
+        }
+
+        /* Video Container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            margin: 20px 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .company-name {
+                font-size: 1.8em;
+            }
+            
+            .nav-options {
+                gap: 10px;
+            }
+            
+            .nav-option {
+                font-size: 0.8em;
+                padding: 5px 10px;
+            }
+            
+            .main-content {
+                padding-top: 180px;
+            }
+            
+            .hero-title {
+                font-size: 2em;
+            }
+            
+            .talent-grid {
+                padding: 20px;
+                grid-template-columns: 1fr;
+            }
+            
+            .football-icons {
+                display: none;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .side-menu {
+                width: 250px;
+                left: -250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    
+    <!-- Menu Toggle -->
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    
+    <!-- Side Menu -->
+    <nav class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <div class="menu-logo">WYN MANAGEMENT</div>
+        </div>
+        <div class="menu-items">
+            <a href="#home" class="menu-item active" onclick="setActiveSection('home')">Home</a>
+            <a href="#talents" class="menu-item" onclick="setActiveSection('talents')">Our Talents</a>
+            <a href="#services" class="menu-item" onclick="setActiveSection('services')">Services</a>
+            <a href="#about" class="menu-item" onclick="setActiveSection('about')">About Us</a>
+            <a href="#contact" class="menu-item" onclick="setActiveSection('contact')">Contact</a>
+        </div>
+    </nav>
+    
+    <!-- Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+    <header class="header">
+        <h1 class="company-name">WYN MANAGEMENT</h1>
+        <nav class="nav-options">
+            <a href="#home" class="nav-option active" onclick="setActiveNav(this)">Home</a>
+            <a href="#talents" class="nav-option" onclick="setActiveNav(this)">Talents</a>
+            <a href="#services" class="nav-option" onclick="setActiveNav(this)">Services</a>
+            <a href="#about" class="nav-option" onclick="setActiveNav(this)">About</a>
+            <a href="#contact" class="nav-option" onclick="setActiveNav(this)">Contact</a>
+        </nav>
+        <div class="red-line"></div>
+    </header>
+
+    <div class="football-icons">
+        <div class="football-silhouette"></div>
+        <div class="football-ball"></div>
+    </div>
+
+    <main class="main-content" id="mainContent">
+        <section class="hero-section" id="home">
+            <h1 class="hero-title">Elite Talent Management</h1>
+            <p class="hero-subtitle">Scouting • Refining • Managing • Branding • Publicity</p>
+        </section>
+
+        <section class="talent-grid" id="talents">
+            <div class="talent-card" onclick="openModal('jacobModal')">
+                <div class="talent-image" style="background-image: url('https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=300&h=300&fit=crop&crop=face');">
+                    <span style="display: none;">⚽</span>
+                </div>
+                <h3 class="talent-name">Jacob Njoku</h3>
+                <p class="talent-role">Professional Footballer</p>
+                <p class="talent-description">
+                    Born November 16, 1997, Jacob is a Nigerian professional footballer who plays as a forward with renowned prowess in the football industry.
+                </p>
+                <button class="expand-btn" onclick="event.stopPropagation(); openModal('jacobModal')">Learn More</button>
+            </div>
+
+            <div class="talent-card" onclick="openModal('oscarModal')">
+                <div class="talent-image" style="background-image: url('https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?w=300&h=300&fit=crop&crop=face');">
+                    <span style="display: none;">🌟</span>
+                </div>
+                <h3 class="talent-name">Oscar Onyeka</h3>
+                <p class="talent-role">Rising Football Star</p>
+                <p class="talent-description">
+                    A promising young talent who recently signed his first professional career contract with Kasuka FC. Oscar represents the future of Nigerian football.
+                </p>
+                <button class="expand-btn" onclick="event.stopPropagation(); openModal('oscarModal')">Learn More</button>
+            </div>
+
+            <div class="talent-card">
+                <div class="talent-image">📺</div>
+                <h3 class="talent-name">Media Excellence</h3>
+                <p class="talent-role">Publicity & Branding</p>
+                <p class="talent-description">
+                    WYN Management successfully ran media publicity campaigns for Silverbird 4DX Cinema West Africa, demonstrating our expertise in brand management.
+                </p>
+            </div>
+        </section>
+
+        <section class="company-info" id="services">
+            <div class="red-line"></div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3 class="info-title">Our Mission</h3>
+                    <p>WYN Management specializes in scouting, refining, and managing exceptional talents while providing comprehensive branding and publicity services. We transform potential into success.</p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-title">Leadership</h3>
+                    <p><strong>Founder:</strong> SirHope<br><strong>Partner:</strong> SHUSHI</p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-title">Services</h3>
+                    <p>• Talent Scouting & Development<br>• Career Management<br>• Brand Strategy & Publicity<br>• Media Relations<br>• Contract Negotiations</p>
+                </div>
+                <div class="info-card">
+                    <h3 class="info-title">Success Stories</h3>
+                    <p>From managing professional footballers to executing major media campaigns, WYN Management delivers results that elevate careers and brands to new heights.</p>
+                </div>
+            </div>
+            <div class="red-line"></div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contact">
+        <div class="contact-info">
+            <div class="contact-item">
+                <span class="contact-label">Email:</span> wynmanagement.ng@gmail.com
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Address:</span> No. 1 Gurara Street, Maitama, Abuja
+            </div>
+        </div>
+        <div class="red-line"></div>
+        <p>&copy; 2025 WYN Management. Elite Talent Management.</p>
+    </footer>
+
+    <!-- Jacob Njoku Modal -->
+    <div id="jacobModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('jacobModal')">&times;</span>
+            <h2 style="color: #ff0000; margin-bottom: 20px;">Jacob Njoku</h2>
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+                <div class="talent-image" style="width: 120px; height: 120px; background-image: url('https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=300&h=300&fit=crop&crop=face');"></div>
+                <div>
+                    <h3>Professional Footballer</h3>
+                    <p><strong>Born:</strong> November 16, 1997</p>
+                    <p><strong>Position:</strong> Forward</p>
+                    <p><strong>Current Value:</strong> €0.2M-€0.3M</p>
+                </div>
+            </div>
+            <p style="margin-bottom: 20px;">
+                Jacob Njoku is a Nigerian professional footballer with renowned prowess in the football industry. He has played for top clubs including Sabah FA and Kelantan United in Malaysian football. His dynamic playing style and goal-scoring ability have made him a valuable asset, showcasing exceptional skill and dedication on the field.
+            </p>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/jacob_njoku" target="_blank" class="social-link">Instagram</a>
+                <a href="#" class="social-link">YouTube Highlights</a>
+            </div>
+
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Jacob Njoku Highlights" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <h4 style="color: #ff0000; margin: 20px 0 10px;">Career Highlights:</h4>
+            <ul style="margin-left: 20px;">
+                <li>Professional experience with Sabah FA</li>
+                <li>Former player at Kelantan United</li>
+                <li>Strong goal-scoring record in Malaysian football</li>
+                <li>Dynamic forward with excellent positioning</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Oscar Onyeka Modal -->
+    <div id="oscarModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('oscarModal')">&times;</span>
+            <h2 style="color: #ff0000; margin-bottom: 20px;">Oscar Onyeka</h2>
+            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+                <div class="talent-image" style="width: 120px; height: 120px; background-image: url('https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?w=300&h=300&fit=crop&crop=face');"></div>
+                <div>
+                    <h3>Rising Football Star</h3>
+                    <p><strong>Club:</strong> Kasuka FC</p>
+                    <p><strong>Position:</strong> Forward</p>
+                    <p><strong>Status:</strong> First Professional Contract</p>
+                </div>
+            </div>
+            <p style="margin-bottom: 20px;">
+                Oscar Onyeka is a promising young talent who recently signed his first professional career contract with Kasuka FC. He represents the future of Nigerian football, showcasing exceptional skill and dedication. Under WYN Management's guidance, Oscar is positioned to become a major force in professional football.
+            </p>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/oscarrina_dos_santos" target="_blank" class="social-link">Instagram</a>
+                <a href="#" class="social-link">YouTube Training</a>
+            </div>
+
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Oscar Onyeka Training" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <h4 style="color: #ff0000; margin: 20px 0 10px;">Career Development:</h4>
+            <ul style="margin-left: 20px;">
+                <li>Recently signed with Kasuka FC</li>
+                <li>First professional career contract</li>
+                <li>Exceptional technical skills</li>
+                <li>Strong work ethic and determination</li>
+                <li>Future star of Nigerian football</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Menu functionality
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            const mainContent = document.getElementById('mainContent');
+            
+            menu.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function setActiveSection(section) {
+            // Update side menu active state
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Close menu on mobile
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+            
+            // Scroll to section
+            document.getElementById(section).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function setActiveNav(element) {
+            // Update navigation active state
+            const navOptions = document.querySelectorAll('.nav-option');
+            navOptions.forEach(option => option.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Modal functionality
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Smooth scrolling and navigation highlighting
+        window.addEventListener('scroll', function() {
+            const sections = ['home', 'talents', 'services', 'contact'];
+            let current = '';
+            
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    if (rect.top <= 200 && rect.bottom >= 200) {
+                        current = section;
+                    }
+                }
+            });
+            
+            if (current) {
+                // Update navigation
+                const navOptions = document.querySelectorAll('.nav-option');
+                navOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('href') === '#' + current) {
+                        option.classList.add('active');
+                    }
+                });
+                
+                // Update side menu
+                const menuItems = document.querySelectorAll('.menu-item');
+                menuItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === '#' + current) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
+
+        // Initialize animations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.talent-card');
+            
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+            });
+
+            // Add glitch effect to company name
+            const companyName = document.querySelector('.company-name');
+            setInterval(() => {
+                companyName.style.textShadow = `
+                    ${Math.random() * 2}px ${Math.random() * 2}px #ff0000,
+                    ${Math.random() * -2}px ${Math.random() * 2}px #00ff00,
+                    ${Math.random() * 2}px ${Math.random() * -2}px #0000ff
+                `;
+                setTimeout(() => {
+                    companyName.style.textShadow = 'none';
+                }, 100);
+            }, 5000);
+
+            // Animate talent names on load
+            const talentNames = document.querySelectorAll('.talent-name');
+            talentNames.forEach((name, index) => {
+                setTimeout(() => {
+                    name.style.animation = 'illuminateText 2s ease-in-out infinite';
+                }, index * 300);
+            });
+
+            // Add typing effect to hero title
+            const heroTitle = document.querySelector('.hero-title');
+            const text = heroTitle.textContent;
+            heroTitle.textContent = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    heroTitle.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            }
+            
+            setTimeout(typeWriter, 1000);
+        });
+
+        // Handle navigation clicks
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add parallax effect to football icons
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const footballIcons = document.querySelector('.football-icons');
+            if (footballIcons) {
+                footballIcons.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all talent cards and info cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.talent-card, .info-card');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(50px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
