@@ -25,7 +25,13 @@
 </head>
 <body>
   <div class="container">
-    <a class="back" href="index.html">← Back to Home</a>
+    <nav aria-label="breadcrumb" style="margin-bottom:12px;">
+      <a class="back" href="index.html">Home</a>
+      <span style="margin:0 6px;color:#888;">›</span>
+      <span style="color:#bbb;">Profiles</span>
+      <span style="margin:0 6px;color:#888;">›</span>
+      <span style="color:#fff;">Oscar Onyeka</span>
+    </nav>
     <div class="header">
       <div class="avatar" style="background-image:url('assets/images/oscar_profile.png');"></div>
       <div>
@@ -55,6 +61,16 @@
       </div>
 
       <div class="card">
+        <h2>Career Timeline</h2>
+        <ul>
+          <li>Aug 2025 — Transfers to Kasuka FC (Brunei), joins Jacob Njoku</li>
+          <li>2024–2025 — Development phase and trials (youth to pro transition)</li>
+          <li>— Earlier youth career entries can be added here on confirmation —</li>
+        </ul>
+        <p style="color:#aaa; font-size:0.95em;">Will be updated as official match data and club history are published.</p>
+      </div>
+
+      <div class="card">
         <h2>Key Targets (Season)</h2>
         <ul>
           <li>Goal contributions (G+A): —</li>
@@ -63,7 +79,32 @@
         </ul>
         <p style="color:#aaa; font-size:0.95em;">Figures will be populated as match data becomes available.</p>
       </div>
+
+      <div class="card">
+        <h2>Key Statistics (latest)</h2>
+        <ul>
+          <li>Appearances (season): <span id="os_apps">—</span></li>
+          <li>Goals (season): <span id="os_goals">—</span></li>
+          <li>Assists (season): <span id="os_assists">—</span></li>
+          <li>Minutes played: <span id="os_minutes">—</span></li>
+        </ul>
+        <p style="color:#aaa; font-size:0.95em;">Will be auto-populated as official data is available.</p>
+      </div>
     </div>
   </div>
 </body>
 </html>
+<script>
+  // Placeholder auto-fill hook for Oscar (extend API when official data source is ready)
+  (async function(){
+    try {
+      const res = await fetch('/api/gemini-refresh?player=oscar');
+      const js = await res.json();
+      const d = js?.data?.competitions?.season || {};
+      if (typeof d.apps === 'number') document.getElementById('os_apps').textContent = d.apps;
+      if (typeof d.goals === 'number') document.getElementById('os_goals').textContent = d.goals;
+      if (typeof d.assists === 'number') document.getElementById('os_assists').textContent = d.assists;
+      if (typeof d.minutes === 'number') document.getElementById('os_minutes').textContent = d.minutes;
+    } catch(e) { /* no-op */ }
+  })();
+</script>

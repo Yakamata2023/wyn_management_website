@@ -21,11 +21,20 @@
     .media iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
     .nav { display:flex; gap:10px; margin-top:10px; }
     .back { color:#fff; text-decoration:none; border:1px solid #fff; padding:8px 12px; border-radius:8px; }
+    table.stats { width:100%; border-collapse: collapse; margin-top:10px; }
+    table.stats th, table.stats td { border:1px solid #444; padding:8px 10px; text-align:left; }
+    table.stats th { background:#111; color:#e6e6e6; }
   </style>
 </head>
 <body>
   <div class="container">
-    <a class="back" href="index.html">← Back to Home</a>
+    <nav aria-label="breadcrumb" style="margin-bottom:12px;">
+      <a class="back" href="index.html">Home</a>
+      <span style="margin:0 6px;color:#888;">›</span>
+      <span style="color:#bbb;">Profiles</span>
+      <span style="margin:0 6px;color:#888;">›</span>
+      <span style="color:#fff;">Jacob Njoku</span>
+    </nav>
     <div class="header">
       <div class="avatar" style="background-image:url('assets/images/jacob_profile.png');"></div>
       <div>
@@ -61,11 +70,104 @@
           <li>ASEAN Club Championship Qualifiers (2025): Appearances — 2</li>
           <li>AFC Challenge League Qualifying (2025): Appearances — 1</li>
           <li>Latest notable match (Aug 2025, Kasuka vs DH Cebu): Goals — 2</li>
-          <li>Season totals (Kasuka FC, 2025): Appearances — –, Goals — –, Assists — –</li>
+          <li>Malaysia Super League (2022): Appearances — 2</li>
+          <li>Malaysia FA Cup (2021): Appearances — 2</li>
+          <li>Piala Malaysia (2021): Appearances — 1</li>
+          <li>Israel — Ligat ha'Al (2016): Appearances — 6</li>
+          <li>Israel — Liga Leumit (season on profile): Appearances — 22</li>
         </ul>
         <p style="color:#aaa; font-size:0.95em;">
-          Source: <a href="https://www.transfermarkt.com/jacob-njoku/leistungsdaten/spieler/452336" target="_blank" style="color:#9ad;">Transfermarkt</a>. We will refresh totals as new data is published.
+          Source: <a href="https://www.transfermarkt.com/jacob-njoku/leistungsdaten/spieler/452336" target="_blank" style="color:#9ad;">Transfermarkt (Detailed)</a>
         </p>
+
+        <h3 style="margin-top:16px;">Season & Career Totals (table)</h3>
+        <table class="stats">
+          <thead>
+            <tr>
+              <th>Competition / Season</th>
+              <th>Club</th>
+              <th>Apps</th>
+              <th>Goals</th>
+              <th>Assists</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ASEAN Club Championship Qualifiers (2025)</td>
+              <td>Kasuka FC</td>
+              <td id="accq_apps">2</td>
+              <td id="accq_goals">—</td>
+              <td id="accq_assists">—</td>
+            </tr>
+            <tr>
+              <td>AFC Challenge League Qualifying (2025)</td>
+              <td>Kasuka FC</td>
+              <td id="achq_apps">1</td>
+              <td id="achq_goals">—</td>
+              <td id="achq_assists">—</td>
+            </tr>
+            <tr>
+              <td>Malaysia Super League (2022)</td>
+              <td>Kelantan United / Sabah</td>
+              <td id="mys1_apps">2</td>
+              <td id="mys1_goals">—</td>
+              <td id="mys1_assists">—</td>
+            </tr>
+            <tr>
+              <td>Malaysia FA Cup (2021)</td>
+              <td>Kelantan United</td>
+              <td id="mysp_apps">2</td>
+              <td id="mysp_goals">—</td>
+              <td id="mysp_assists">—</td>
+            </tr>
+            <tr>
+              <td>Piala Malaysia (2021)</td>
+              <td>Kelantan United</td>
+              <td id="myc1_apps">1</td>
+              <td id="myc1_goals">—</td>
+              <td id="myc1_assists">—</td>
+            </tr>
+            <tr>
+              <td>Ligat ha'Al (2016)</td>
+              <td>Israel (club per season)</td>
+              <td id="isr1_apps">6</td>
+              <td id="isr1_goals">—</td>
+              <td id="isr1_assists">—</td>
+            </tr>
+            <tr>
+              <td>Liga Leumit (season on profile)</td>
+              <td>Israel (club per season)</td>
+              <td id="isr2_apps">22</td>
+              <td id="isr2_goals">—</td>
+              <td id="isr2_assists">—</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="color:#aaa; font-size:0.9em; margin-top:8px;">Goal/assist figures will be filled as soon as Transfermarkt publishes them per row.</p>
+      </div>
+
+      <div class="card">
+        <h2>Career Totals (highlights)</h2>
+        <ul>
+          <li>Total competitive appearances (selected competitions): 33+</li>
+          <li>Latest braces: Aug 2025 — Kasuka vs DH Cebu (2 goals)</li>
+          <li>Primary positions: Centre Forward, Second Striker</li>
+        </ul>
+        <p style="color:#aaa; font-size:0.95em;">
+          Source: <a href="https://www.transfermarkt.com/jacob-njoku/leistungsdaten/spieler/452336" target="_blank" style="color:#9ad;">Transfermarkt</a>
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Career Timeline</h2>
+        <ul>
+          <li>Aug 2025 — Transfers to Kasuka FC (Brunei)</li>
+          <li>2021–2022 — Kelantan United (Malaysia); Malaysia Cup & FA Cup appearances</li>
+          <li>2019–2020 — Sabah (Malaysia)</li>
+          <li>2018 — Merani Martvili / Erovnuli Liga appearances</li>
+          <li>2016 — Hapoel Ashkelon / Hapoel Tel Aviv (Israel top flight appearances)</li>
+        </ul>
+        <p style="color:#aaa; font-size:0.95em;">Timeline synthesized from Transfermarkt profile pages and competitions listed.</p>
       </div>
 
       <div class="card">
@@ -99,9 +201,37 @@
       <div class="card">
         <h2>Management Contact</h2>
         <p>For trials, media, and sponsorships, contact WYN Management.</p>
-        <a class="btn" href="index.html#contact">Go to Contact</a>
+        <a class="btn" href="contact.html">Go to Contact</a>
       </div>
     </div>
   </div>
 </body>
 </html>
+<script>
+  // Auto-fill from API (Vercel function) when available
+  (async function(){
+    try {
+      const res = await fetch('/api/gemini-refresh?player=jacob');
+      const js = await res.json();
+      const d = js?.data?.competitions || {};
+      const map = {
+        accq: d.accq_2025,
+        achq: d.achq_2025,
+        mys1: d.mys1_2022,
+        mysp: d.mysp_2021,
+        myc1: d.myc1_2021,
+        isr1: d.isr1_2016,
+        isr2: d.isr2_misc
+      };
+      Object.entries(map).forEach(([k, v]) => {
+        if (!v) return;
+        const apps = document.getElementById(`${k}_apps`);
+        const goals = document.getElementById(`${k}_goals`);
+        const assists = document.getElementById(`${k}_assists`);
+        if (apps && typeof v.apps === 'number') apps.textContent = v.apps;
+        if (goals && v.goals != null) goals.textContent = v.goals;
+        if (assists && v.assists != null) assists.textContent = v.assists;
+      });
+    } catch (e) { /* silent */ }
+  })();
+</script>
