@@ -30,6 +30,11 @@ export default async function handler(req, res) {
     if (player === "jacob") {
       sources.push("https://www.transfermarkt.com/jacob-njoku/leistungsdaten/spieler/452336/saison//plus/1");
       sources.push("https://www.transfermarkt.com/jacob-njoku/leistungsdaten/spieler/452336");
+    } else if (player === "oscar") {
+      // Configure Oscar sources via environment, comma-separated. Example:
+      // OSCAR_SOURCES="https://club.example.com/oscar/profile,https://league.example.com/oscar/stats"
+      const envList = (process.env.OSCAR_SOURCES || "").split(",").map(s => s.trim()).filter(Boolean);
+      if (envList.length) sources.push(...envList);
     }
 
     const pages = await Promise.allSettled(
@@ -42,17 +47,8 @@ export default async function handler(req, res) {
       .map(p => `URL: ${p.value.url}\n\n${p.value.html.substring(0, 20000)}`)
       .join("\n\n====\n\n");
 
-    const prompt = `You are a data extraction agent. From the provided HTML snippets (Transfermarkt pages), extract structured football statistics for ${player} with keys:\n{
-      "competitions": {
-        "accq_2025": {"apps": number, "goals": number|null, "assists": number|null},
-        "achq_2025": {"apps": number, "goals": number|null, "assists": number|null},
-        "mys1_2022": {"apps": number, "goals": number|null, "assists": number|null},
-        "mysp_2021": {"apps": number, "goals": number|null, "assists": number|null},
-        "myc1_2021": {"apps": number, "goals": number|null, "assists": number|null},
-        "isr1_2016": {"apps": number, "goals": number|null, "assists": number|null},
-        "isr2_misc": {"apps": number, "goals": number|null, "assists": number|null}
-      }
-    }\nReturn strictly valid JSON.`;
+    const promptJacob = `You are a data extraction agent. From the provided HTML snippets (Transfermarkt pages), extract structured football statistics for Jacob Njoku with keys:\n{\n  \"competitions\": {\n    \"accq_2025\": {\"apps\": number, \"goals\": number|null, \"assists\": number|null},\n    \"achq_2025\": {\"apps\": number, \"goals\": number|null, \"assists\": number|null},\n    \"mys1_2022\": {\"apps\": number, \"goals\": number|null, \"assists\": number|null},\n    \"mysp_2021\": {\"apps\": number, \"goals\": number|null, \"assists\": number|null},\n    \"myc1_2021\": {\"apps\": number, \"goals\": number|null, \"assists\": number|null},\n    \"isr1_2016\": {\"apps\": number, \"goals\": number|null, \"assists\": number|null},\n    \"isr2_misc\": {\"apps\": number, \"goals\": number|null, \"assists\": number|null}\n  }\n}\nReturn strictly valid JSON.`;
+    const promptOscar = `From the provided official pages, extract Oscar Onyeka's season stats as:\n{\n  \"competitions\": {\n    \"season\": {\"apps\": number|null, \"goals\": number|null, \"assists\": number|null, \"minutes\": number|null}\n  }\n}\nReturn strictly valid JSON. If data is missing, use null.`;
 
     const resp = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY,
@@ -61,7 +57,7 @@ export default async function handler(req, res) {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           contents: [
-            { role: "user", parts: [ { text: prompt } ] },
+            { role: "user", parts: [ { text: player === 'jacob' ? promptJacob : promptOscar } ] },
             { role: "user", parts: [ { text: combined || "No HTML captured." } ] }
           ]
         })
