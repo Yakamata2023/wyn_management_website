@@ -233,37 +233,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Football Icons */
-        .football-icons {
-            position: absolute;
-            right: 50px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-        }
-
-        .football-silhouette {
-            width: 150px;
-            height: 200px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"><path d="M50 10 C30 10 15 25 15 45 L15 95 C15 115 30 130 50 130 C70 130 85 115 85 95 L85 45 C85 25 70 10 50 10 Z" fill="%23333"/><circle cx="50" cy="125" r="8" fill="%23888888"/><path d="M40 20 L45 30 L55 30 L60 20" stroke="%23888888" fill="none" stroke-width="2"/><path d="M30 50 L35 60 L65 60 L70 50" stroke="%23888888" fill="none" stroke-width="2"/></svg>') no-repeat center;
-            background-size: contain;
-            animation: float 3s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        .football-ball {
-            width: 50px;
-            height: 50px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23ffffff" stroke="%23000" stroke-width="2"/><path d="M30 30 L70 70 M70 30 L30 70" stroke="%23000" stroke-width="2"/><circle cx="50" cy="50" r="15" fill="none" stroke="%23000" stroke-width="2"/></svg>') no-repeat center;
-            background-size: contain;
-            animation: spin 4s linear infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -277,6 +246,49 @@
             padding: 50px;
             max-width: 1400px;
             margin: 0 auto;
+        }
+
+        .updates-section { 
+            margin: 30px auto 40px; 
+            max-width: 800px; 
+            text-align: center; 
+        }
+        .updates-title { 
+            font-size: 1.4rem; 
+            color: #ffffff; 
+            margin-bottom: 12px; 
+        }
+        .updates-slider { 
+            position: relative; 
+            background: linear-gradient(145deg,#1a1a1a,#2a2a2a); 
+            border:1px solid #333; 
+            border-radius: 14px; 
+            overflow: hidden; 
+        }
+        .updates-slide { 
+            display: none; 
+            padding: 20px; 
+            min-height: 120px; 
+            text-align: left; 
+        }
+        .updates-slide.active { 
+            display: block; 
+        }
+        .updates-bullets { 
+            display:flex; 
+            gap:6px; 
+            justify-content:center; 
+            padding: 10px 0; 
+        }
+        .updates-bullet { 
+            width:8px; 
+            height:8px; 
+            border-radius:50%; 
+            background:#555; 
+            cursor: pointer; 
+        }
+        .updates-bullet.active { 
+            background:#fff; 
         }
 
         .talent-card {
@@ -586,7 +598,7 @@
             <a href="#talents" class="menu-item" onclick="setActiveSection('talents')">Our Talents</a>
             <a href="#services" class="menu-item" onclick="setActiveSection('services')">Services</a>
             <a href="#about" class="menu-item" onclick="setActiveSection('about')">About Us</a>
-            <a href="contact.html" class="menu-item">Contact</a>
+            <a href="pages/contact.html" class="menu-item">Contact</a>
         </div>
     </nav>
     
@@ -595,20 +607,11 @@
 
     <header class="header">
         <h1 class="company-name">WYN MANAGEMENT</h1>
-        <nav class="nav-options">
-            <a href="#home" class="nav-option active" onclick="setActiveNav(this)">Home</a>
-            <a href="#talents" class="nav-option" onclick="setActiveNav(this)">Talents</a>
-            <a href="#services" class="nav-option" onclick="setActiveNav(this)">Services</a>
-            <a href="#about" class="nav-option" onclick="setActiveNav(this)">About</a>
-            <a href="contact.html" class="nav-option">Contact</a>
-        </nav>
+        <!-- Navigation moved to sidebar menu only -->
         <div class="red-line"></div>
     </header>
 
-    <div class="football-icons">
-        <div class="football-silhouette"></div>
-        <div class="football-ball"></div>
-    </div>
+    <!-- Football icons removed -->
 
     <main class="main-content" id="mainContent">
         <section class="hero-section" id="home">
@@ -640,7 +643,7 @@
         </section>
 
         <section class="talent-grid" id="talents">
-            <div class="talent-card" onclick="window.open('jacob.html','_blank')">
+            <div class="talent-card" onclick="window.open('pages/jacob.html','_blank')">
                 <div class="talent-image" style="background-image: url('assets/images/jacob.jpg');">
                     <span style="display: none;">⚽</span>
                 </div>
@@ -649,10 +652,10 @@
                 <p class="talent-description">
                     Born November 16, 1997, Jacob is a Nigerian professional footballer (forward). Currently with Kasuka FC (Brunei) after previous spells including Sabah FA and Kelantan United (Malaysia).
                 </p>
-                <button class="expand-btn" onclick="event.stopPropagation(); window.open('jacob.html','_blank')">View Profile</button>
+                <button class="expand-btn" onclick="event.stopPropagation(); window.open('pages/jacob.html','_blank')">View Profile</button>
             </div>
 
-            <div class="talent-card" onclick="window.open('oscar.html','_blank')">
+            <div class="talent-card" onclick="window.open('pages/oscar.html','_blank')">
                 <div class="talent-image" style="background-image: url('assets/images/oscar.jpg');">
                     <span style="display: none;">🌟</span>
                 </div>
@@ -661,7 +664,7 @@
                 <p class="talent-description">
                     A promising young talent who recently signed his first professional career contract with Kasuka FC. Oscar represents the future of Nigerian football.
                 </p>
-                <button class="expand-btn" onclick="event.stopPropagation(); window.open('oscar.html','_blank')">View Profile</button>
+                <button class="expand-btn" onclick="event.stopPropagation(); window.open('pages/oscar.html','_blank')">View Profile</button>
             </div>
 
             <div class="talent-card">
@@ -814,6 +817,43 @@
     </div>
 
     <script>
+        // Updates slider logic (5 slides, 10s interval)
+        (function() {
+            const slider = document.getElementById('updatesSlider');
+            if (!slider) return;
+            const slides = Array.from(slider.querySelectorAll('.updates-slide'));
+            const bullets = document.getElementById('updatesBullets');
+            let idx = 0;
+            
+            // Ensure only first slide is active initially
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === 0) slide.classList.add('active');
+            });
+            
+            // Build bullets
+            slides.forEach((_, i) => {
+                const b = document.createElement('span');
+                b.className = 'updates-bullet' + (i === 0 ? ' active' : '');
+                b.addEventListener('click', () => show(i));
+                bullets.appendChild(b);
+            });
+            const bulletEls = Array.from(bullets.querySelectorAll('.updates-bullet'));
+            
+            function show(i){
+                slides[idx].classList.remove('active');
+                bulletEls[idx].classList.remove('active');
+                idx = i;
+                slides[idx].classList.add('active');
+                bulletEls[idx].classList.add('active');
+            }
+            
+            setInterval(() => {
+                const next = (idx + 1) % slides.length;
+                show(next);
+            }, 10000);
+        })();
+
         // Menu functionality
         function toggleMenu() {
             const menu = document.getElementById('sideMenu');
@@ -966,14 +1006,7 @@
             });
         });
 
-        // Add parallax effect to football icons
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const footballIcons = document.querySelector('.football-icons');
-            if (footballIcons) {
-                footballIcons.style.transform = `translateY(${scrolled * 0.5}px)`;
-            }
-        });
+        // Parallax effect removed with football icons
 
         // Add intersection observer for animations
         const observerOptions = {
